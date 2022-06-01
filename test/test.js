@@ -28,22 +28,16 @@ contract('tests',(accounts)=>{
             assert.equal(result.logs[0].args.fund,toWei('3'))
             let id=await raise.lookUpId(accounts[1])
             assert.equal(id,1)
-            let exist1=await raise.exists(accounts[1]);
-            console.log(exist1)
         })
         it('should not add fund raiser',async()=>{
             await expect(raise.addFundRaiser(toWei('3'),'To pay children school fees',{from:accounts[1]})
                 ).to.be.rejectedWith('Fund Raiser already exists')
-                let exist1=await raise.exists(accounts[1]);
-                console.log(exist1)
         })
         it('should also add the fund raiser to the platform',async()=>{
             let result=await raise.addFundRaiser(toWei('2'),'For the orphanage',{from:accounts[2]})
             assert.equal(parseInt(result.logs[0].args.fund.toString()),toWei('2'))
             let id=await raise.lookUpId(accounts[2])
             assert.equal(id,2)
-            let exist1=await raise.exists(accounts[1]);
-            console.log(exist1)
         })
     })
     describe('contribute function',()=>{

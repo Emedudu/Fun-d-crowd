@@ -12,7 +12,7 @@ contract FundRaising {
     struct FundRaiser{
         address payable adress;
         uint votes;
-        string purpose;
+        string uri;
         uint initialAmount;
         int fundLeft;
         uint projectsFunded;
@@ -25,8 +25,8 @@ contract FundRaising {
     // look up id of a particular address that might have been added to fund raisers platform in the past
     mapping(address=>uint) public lookUpId;
     // events
-    event FundRaiserAdded(address indexed sender,uint id,uint fund,string purpose);
-    event Contributed(address indexed sender,address to,uint amount);
+    event FundRaiserAdded(address indexed sender,uint id,uint fund,string uri);
+    event Contributed(address indexed sender,address to,uint amount, string uri);
     // constructor
     constructor(uint percent){
         // initializing bank charges and address during deployment
@@ -34,7 +34,7 @@ contract FundRaising {
         feeBank=payable(msg.sender);
     }
     // add a fund raiser to the platform (accepts purpose and fund as input)
-    function addFundRaiser(uint fund,string memory purpose)public{
+    function addFundRaiser(uint fund,string memory uri)public{
         // a particular fund raiser cannot raise multiple funds at a time
         require(!exists[msg.sender],'Fund Raiser already exists');
         uint id;
@@ -54,14 +54,14 @@ contract FundRaising {
         FundRaiser storage fundRaiser=fundRaisers[id];
         fundRaiser.adress=payable(msg.sender);
         fundRaiser.votes=0;
-        fundRaiser.purpose=purpose;
+        fundRaiser.uri=uri;
         fundRaiser.initialAmount=fund;
         fundRaiser.fundLeft=int(fund);
         fundRaiser.projectsFunded=fundedProjects;
         fundRaiser.allVoters;
         // update 'exists' value to prevent same fund raiser from raising funds twice
         exists[msg.sender]=true;
-        emit FundRaiserAdded(msg.sender,id,fund,purpose);
+        emit FundRaiserAdded(msg.sender,id,fund,uri);
     }
     // vote a fund raiser to show priority
     function vote(uint id)public{
@@ -91,7 +91,7 @@ contract FundRaising {
             votee.projectsFunded+=1;
             exists[votee.adress]=false;
         }
-        emit Contributed(msg.sender,votee.adress,amount);
+        emit Contributed(msg.sender,votee.adress,amount,votee.uri);
     }
     // calculate the bank fee
     function calculateBankFee(uint amt)public view returns(uint){
