@@ -2,30 +2,36 @@ pragma solidity ^0.8.0;
 
 contract FundRaising {
     // unique id for each fund raiser
-    uint fundRaiserId;
+    uint public fundRaiserId;
     // percentage of bank charges
-    uint percentage;
+    uint public percentage;
     // address to pay the bank charges
-    address payable feeBank;
+    address payable public feeBank;
     // fund raiser is an object with values: address(for payment of funds), votes(to sort fund raisers according to priority),
     // purpose of raising the fund, and amount of fund left to be completed 
     struct FundRaiser{
         address payable adress;
         uint votes;
         string purpose;
-        uint fundLeft;
+        uint initialAmount;
+        int fundLeft;
+        uint projectsFunded;
+        mapping(address=>bool) allVoters;
     }
     // a mapping of the fund raisers id to the fund raisers object
-    mapping(uint=>FundRaiser) fundRaisers;
+    mapping(uint=>FundRaiser) public fundRaisers;
     // mapping address of the fund raiser to a boolean(exists or not)
-    mapping(address=>bool) exists;
+    mapping(address=>bool) public exists;
     // look up id of a particular address that might have been added to fund raisers platform in the past
-    mapping(address=>uint) lookUpId;
+    mapping(address=>uint) public lookUpId;
+    // events
+    event FundRaiserAdded(address indexed sender,uint id,uint fund,string purpose);
+    event Contributed(address indexed sender,address to,uint amount);
     // constructor
-    constructor(uint percent,address bank){
+    constructor(uint percent){
         // initializing bank charges and address during deployment
         percentage=percent;
-        feeBank=payable(bank);
+        feeBank=payable(msg.sender);
     }
     // add a fund raiser to the platform (accepts purpose and fund as input)
     function addFundRaiser(uint fund,string memory purpose)public{
@@ -44,20 +50,26 @@ contract FundRaising {
             // (this is to ensure credibility of a particular fund raiser)
             id=lookUpId[msg.sender];
         }
-        fundRaisers[id]=FundRaiser({
-            adress:payable(msg.sender),
-            votes:0,
-            purpose:purpose,
-            fundLeft:fund
-        });
+        uint fundedProjects=fundRaisers[id].projectsFunded;
+        FundRaiser storage fundRaiser=fundRaisers[id];
+        fundRaiser.adress=payable(msg.sender);
+        fundRaiser.votes=0;
+        fundRaiser.purpose=purpose;
+        fundRaiser.initialAmount=fund;
+        fundRaiser.fundLeft=int(fund);
+        fundRaiser.projectsFunded=fundedProjects;
+        fundRaiser.allVoters;
         // update 'exists' value to prevent same fund raiser from raising funds twice
         exists[msg.sender]=true;
+        emit FundRaiserAdded(msg.sender,id,fund,purpose);
     }
     // vote a fund raiser to show priority
     function vote(uint id)public{
         FundRaiser storage votee=fundRaisers[id];
+        require(votee.allVoters[msg.sender]==false,'You cannot vote twice');
         require(id<=fundRaiserId && exists[votee.adress],'Fund Raiser does not exist');
         votee.votes++;
+        votee.allVoters[msg.sender]=true;
     }
     // contribute to a fund raiser
     function contribute(uint id)payable public{
@@ -72,14 +84,14 @@ contract FundRaising {
         // transfer to the bank and fund raiser
         feeBank.transfer(fee);
         votee.adress.transfer(amount-fee);
+
+        votee.fundLeft-=int(amount-fee);
         // if fund already raised, remove fund raiser
-        if (votee.fundLeft<=amount-fee){
-            votee.fundLeft=0;
+        if (votee.fundLeft<=0){
+            votee.projectsFunded+=1;
             exists[votee.adress]=false;
-        }else{
-            // else just subtract the amount contributed
-            votee.fundLeft-=(amount-fee);
         }
+        emit Contributed(msg.sender,votee.adress,amount);
     }
     // calculate the bank fee
     function calculateBankFee(uint amt)public view returns(uint){
