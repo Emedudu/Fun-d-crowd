@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DetailRaiserCard from '../components/DetailRaiserCard';
+import RaiserCard from '../components/RaiserCard';
 
-const Home=({contract,setLoading,fundRaisers,setFundRaisers})=>{
+const Home=({contract,
+            account,
+            setLoading,
+            homeInitialRender,
+            setHomeInitialRender,
+            fundRaisers,
+            setFundRaisers})=>{
     const [toggler, setToggler]=useState(false)
     const [fundRaiserDetails,setFundRaiserDetails]=useState({})
     const getAllFundRaisers=async()=>{
@@ -13,9 +20,11 @@ const Home=({contract,setLoading,fundRaisers,setFundRaisers})=>{
             let fundRaiserFetched=await contract.methods.fundRaisers(i).call()
             let exists=await contract.methods.exists(fundRaiserFetched.adress).call()
             if (exists){
+                console.log(fundRaiserFetched.uri)
                 let response=await fetch(fundRaiserFetched.uri)
+                console.log(response)
                 let metadata=await response.json()
-
+                
                 let adress=fundRaiserFetched.adress
                 let votes=fundRaiserFetched.votes
                 let heading=metadata.heading
@@ -41,12 +50,36 @@ const Home=({contract,setLoading,fundRaisers,setFundRaisers})=>{
         setFundRaisers(fundRaisersFetched)
         setLoading(false)
     }
+    useEffect(()=>{
+        if(contract!==''){
+            if (homeInitialRender) {
+                getAllFundRaisers()
+                setHomeInitialRender(false);
+            } 
+        }
+    },[contract])
+    contract&&contract.events.FundRaiserAdded({
+        filter:{sender:account}
+    })
+    .on('data',event=>{
+        // setMessage
+        getAllFundRaisers()
+    })
+    contract&&contract.events.Contributed({
+        filter:{sender:account}
+    })
+    .on('data',event=>{
+        // setMessage
+        getAllFundRaisers()
+    })
     return(
         <div>
-            Home
             <div>
                 <DetailRaiserCard 
+                contract={contract}
+                account={account}
                 toggler={toggler}
+                setToggler={setToggler}
                 fundRaiserDetails={fundRaiserDetails}/>
                 {fundRaisers.length?(
                     <div className='row d-flex justify-content-center'>

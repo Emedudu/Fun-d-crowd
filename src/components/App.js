@@ -11,9 +11,12 @@ import Register from '../screens/Register';
 const App =()=> {
   const [contract,setContract]=useState('')
   const [accounts,setAccounts]=useState('')
-  const [loading,setLoading]=useState(false)
+  const [loading,setLoading]=useState(true)
+  const [homeInitialRender,setHomeInitialRender]=useState(true)
+  const [contributionsInitialRender,setContributionsInitialRender]=useState(true)
   const [message,setMessage]=useState('')
   const [fundRaisers,setFundRaisers]=useState([])
+  const [allContributions,setAllContributions]=useState([])
   
   const loadBlockChainData=async()=>{
     setLoading(true)
@@ -52,8 +55,8 @@ const App =()=> {
   },[])
 
   return (
-    <div className={`container-fluid m-0 p-0 full-width d-flex flex-column ${loading&&'overflow-hidden'}`} style={{'backgroundImage': 'linear-gradient(to right,rgba(255,255,255,0.2),rgba(0,0,100,0.2))'}}>
-      <Navigation walletConnect={loadBlockChainData} account={accounts[0]}/>
+    <div className={`container-fluid m-0 p-0 full-width d-flex flex-column ${loading&&'overflow-hidden'}`} style={{'backgroundImage': 'linear-gradient(to right,rgba(255,255,255,0.2),rgba(0,100,100,0.2))'}}>
+      <Navigation walletConnect={loadBlockChainData} account={accounts[1]}/>
       <div className='container-fluid'>
         <div className={`container-fluid full-width d-flex position-fixed justify-content-between p-3 mb-2 bg-info text-white ${message!==''?'visible':'invisible'}`} style={{'zIndex':'999','backgroundImage':'linear-gradient(to right,rgba(0,0,200,0.5),rgba(255,255,255,0.2))'}}>
           {message}
@@ -67,9 +70,28 @@ const App =()=> {
           </div>
         </div>
         <Routes>
-          <Route exact path='/' element={<Home contract={contract} setLoading={setLoading} fundRaisers={fundRaisers} setFundRaisers={setFundRaisers}/>}/>
-          <Route exact path='/contributions' element={<Contributions contract={contract}/>}/>
-          <Route exact path='/register' element={<Register contract={contract}/>}/>
+          <Route exact path='/' element={<Home 
+                                          contract={contract} 
+                                          account={accounts[1]}
+                                          homeInitialRender={homeInitialRender} 
+                                          setHomeInitialRender={setHomeInitialRender} 
+                                          setLoading={setLoading} 
+                                          fundRaisers={fundRaisers} 
+                                          setFundRaisers={setFundRaisers}/>
+                                          }/>
+          <Route exact path='/contributions' element={<Contributions 
+                                                      contract={contract}
+                                                      account={accounts[1]}
+                                                      setLoading={setLoading}
+                                                      allContributions={allContributions}
+                                                      setAllContributions={setAllContributions}
+                                                      contributionsInitialRender={contributionsInitialRender}
+                                                      setContributionsInitialRender={setContributionsInitialRender}/>
+                                                      }/>
+          <Route exact path='/register' element={<Register 
+                                                  contract={contract} 
+                                                  account={accounts[1]}/>
+                                                  }/>
         </Routes>      
       </div>
     </div>

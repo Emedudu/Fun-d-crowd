@@ -1,7 +1,8 @@
 import React from "react";
 import Web3 from "web3";
 
-const RaiserCard=({setToggler,
+const RaiserCard=({
+    setToggler,
     setFundRaiserDetails,
     id,
     address,
@@ -39,21 +40,11 @@ const RaiserCard=({setToggler,
                         <b>Purpose: </b>{purpose}
                     </p>
                     <p className="card-text">
-                        <b>Price: {web3.utils.fromWei(price.toString())} ETH</b>
+                        <b>Fund Left: {web3.utils.fromWei(fundLeft.toString())} ETH</b>
                     </p>
-                    <p className="card-text">
-                        <b>Creator: </b><i className='font-weight-light'>{creator}</i>
-                    </p>
-                    <button type='button' 
-                            className={`btn btn-primary align-self-center`} 
-                            onClick={()=>{
-                                isOwner?removeNFT(marketId):
-                                buyNFT(marketId,price)}}>
-                        {isOwner?'REMOVE':'BUY'}
-                    </button>
                 </div>
             </div>
         </div>
     )
 }
-export default Card;
+export default RaiserCard;

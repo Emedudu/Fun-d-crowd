@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Navigation=({walletConnect,account})=>{
     const [expanded, setExpanded] = useState(false);
     return(
-        <Navbar expanded={expanded} collapseOnSelect expand="lg" variant="light" sticky='top' style={{'backgroundImage': 'linear-gradient(to right,rgba(255,255,255,0.7),rgba(0,0,200,0.4))'}}>
+        <Navbar expanded={expanded} collapseOnSelect expand="lg" variant="light" sticky='top' style={{'backgroundImage': 'linear-gradient(to right,rgba(255,255,255,0.7),rgba(0,200,200,0.4))'}}>
           <Container>
             <Navbar.Brand href="#home">FUN-D-CROWD</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={() => setExpanded(expanded ? false : "expanded")} />
