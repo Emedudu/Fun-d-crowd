@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-// import Logo from "../images/nft icon.png";
-// <img src={Logo} alt="NFT-MARKETPLACE" width="48" height="48"/>
+import Logo from "../images/crowdFunding.png";
+
 const Navigation=({walletConnect,account})=>{
     const [expanded, setExpanded] = useState(false);
     return(
         <Navbar expanded={expanded} collapseOnSelect expand="lg" variant="light" sticky='top' style={{'backgroundImage': 'linear-gradient(to right,rgba(255,255,255,0.7),rgba(0,200,200,0.4))'}}>
           <Container>
-            <Navbar.Brand href="#home">FUN-D-CROWD</Navbar.Brand>
+            <Navbar.Brand href="#home"><img src={Logo} alt="FUN-D-CROWD" width="48" height="48"/></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={() => setExpanded(expanded ? false : "expanded")} />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">

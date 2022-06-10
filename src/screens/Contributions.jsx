@@ -59,11 +59,13 @@ const Contributions=({contract,
     })
     return(
         <div>
-            <input
-            onInput={filterContributions}
-            placeholder='Search Contributions'
-            className='form-control align-self-center col-12 col-sm-8 col-lg-6 mb-2'
-            />
+            <div className='sticky-top' style={{'paddingTop':'70px'}}>
+                <input
+                onInput={filterContributions}
+                placeholder='Search Contributions'
+                className='form-control align-self-center col-12 col-sm-8 col-lg-6 mb-2'
+                />
+            </div>
             {filteredContributions.length?(
                 <div className='d-flex row justify-content-center'>
                     {filteredContributions.map((obj,i)=>{

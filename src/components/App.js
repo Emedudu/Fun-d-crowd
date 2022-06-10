@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from '../screens/Home';
 import Contributions from '../screens/Contributions';
 import Register from '../screens/Register';
+import { createAlchemyWeb3 } from '@alch/alchemy-web3';
 
 const App =()=> {
   const [contract,setContract]=useState('')
@@ -21,10 +22,10 @@ const App =()=> {
   const loadBlockChainData=async()=>{
     setLoading(true)
     if(typeof window.ethereum!=='undefined'){
-      const web3 = await new Web3(new Web3.providers.WebsocketProvider('ws://localhost:7545'))
-      // const url = `wss://eth-rinkeby.alchemyapi.io/v2/Mf4wYG7-6h-tjTrtHuvf-OiecMxN11vF`;
+      // const web3 = await new Web3(new Web3.providers.WebsocketProvider('ws://localhost:7545'))
+      const url = `wss://polygon-mumbai.g.alchemy.com/v2/O0wTv0npgq5-i1lNyG1_aO92voLXAQnH`;
       // Using WebSockets
-      // const web3 = createAlchemyWeb3(url);
+      const web3 = createAlchemyWeb3(url);
       // Using web3js
       // const web3 = new Web3(new Web3.providers.WebsocketProvider(url));
       await window.ethereum.enable();
@@ -56,7 +57,7 @@ const App =()=> {
 
   return (
     <div className={`container-fluid m-0 p-0 full-width d-flex flex-column ${loading&&'overflow-hidden'}`} style={{'backgroundImage': 'linear-gradient(to right,rgba(255,255,255,0.2),rgba(0,100,100,0.2))'}}>
-      <Navigation walletConnect={loadBlockChainData} account={accounts[1]}/>
+      <Navigation walletConnect={loadBlockChainData} account={accounts[0]}/>
       <div className='container-fluid'>
         <div className={`container-fluid full-width d-flex position-fixed justify-content-between p-3 mb-2 bg-info text-white ${message!==''?'visible':'invisible'}`} style={{'zIndex':'999','backgroundImage':'linear-gradient(to right,rgba(0,0,200,0.5),rgba(255,255,255,0.2))'}}>
           {message}
@@ -72,7 +73,7 @@ const App =()=> {
         <Routes>
           <Route exact path='/' element={<Home 
                                           contract={contract} 
-                                          account={accounts[1]}
+                                          account={accounts[0]}
                                           homeInitialRender={homeInitialRender} 
                                           setHomeInitialRender={setHomeInitialRender} 
                                           setLoading={setLoading} 
@@ -81,7 +82,7 @@ const App =()=> {
                                           }/>
           <Route exact path='/contributions' element={<Contributions 
                                                       contract={contract}
-                                                      account={accounts[1]}
+                                                      account={accounts[0]}
                                                       setLoading={setLoading}
                                                       allContributions={allContributions}
                                                       setAllContributions={setAllContributions}
@@ -90,7 +91,8 @@ const App =()=> {
                                                       }/>
           <Route exact path='/register' element={<Register 
                                                   contract={contract} 
-                                                  account={accounts[1]}/>
+                                                  account={accounts[0]}
+                                                  setLoading={setLoading}/>
                                                   }/>
         </Routes>      
       </div>

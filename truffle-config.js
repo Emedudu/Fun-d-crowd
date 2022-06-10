@@ -1,5 +1,9 @@
 require('babel-register');
 require('babel-polyfill');
+require('dotenv').config();
+var HDWalletProvider = require("@truffle/hdwallet-provider");
+var mnemonic = process.env.MNEMONIC;
+var polygon_key= process.env.POLYGON_KEY;
 
 module.exports = {
   networks: {
@@ -7,6 +11,15 @@ module.exports = {
       host: "127.0.0.1",
       port: 7545,
       network_id: "*" // Match any network id
+    },
+    mumbai_alchemy: {
+      networkCheckTimeout:100000,
+      provider: function() { 
+       return new HDWalletProvider(mnemonic, polygon_key);
+      },
+      network_id: 80001,
+      // gas: 6700000,
+      // gasPrice: 1000000000
     },
   },
   contracts_directory: './src/contracts/',

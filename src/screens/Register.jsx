@@ -4,7 +4,7 @@ import {create as ipfsHttpClient} from 'ipfs-http-client'
 
 const client=ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
-const Register=({contract,account})=>{
+const Register=({contract,account,setLoading})=>{
     const [file,setFile]=useState('')
     const [heading,setHeading]=useState('')
     const [purpose,setPurpose]=useState('')
@@ -21,6 +21,7 @@ const Register=({contract,account})=>{
     }
     const submitForm=async(e)=>{
         e.preventDefault();
+        setLoading(true)
         let metadata=JSON.stringify({heading,purpose,clip:file})
         try{
             let res=await client.add(metadata)
@@ -29,6 +30,7 @@ const Register=({contract,account})=>{
             // gonna setMessage
             console.log('Could not upload to IPFS, Please try again on another device')
         }
+        setLoading(false)
     }
     contract&&contract.events.FundRaiserAdded({
         filter:{adress:account}

@@ -82,11 +82,13 @@ const Home=({contract,
     })
     return(
         <div>
-            <input
-            onInput={filterFundRaisers}
-            placeholder='Search'
-            className='form-control align-self-center col-12 col-sm-8 col-lg-6 mb-2'
-            />
+            <div className='sticky-top' style={{'paddingTop':'70px'}}>
+                <input
+                onInput={filterFundRaisers}
+                placeholder='Search'
+                className='form-control position-fixed align-self-center col-12 col-sm-8 col-lg-6 mb-2'
+                />
+            </div>
             <div >
                 <DetailRaiserCard 
                 contract={contract}
