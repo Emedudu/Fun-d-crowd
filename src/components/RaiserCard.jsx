@@ -31,7 +31,7 @@ const RaiserCard=({
     return(
         <div className="p-3 col-10 col-sm-6 col-lg-4">
             <div className="card" onClick={toggleDetailsFunction}>
-                <img className="card-img-top" src={clip} alt="Card image cap"/>
+                <img className="card-img-top" src={clip} alt="Project Image"/>
                 <div className="card-body">
                     <p className="card-title">
                         <b>Heading: {heading}</b>

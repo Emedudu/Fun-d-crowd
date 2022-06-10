@@ -31,9 +31,9 @@ const DetailRaiserCard=({
         }
     }
     return(
-        <div className={`p-3 position-fixed overflow-auto ${toggler?'visible':'invisible'}`} style={{'backgroundColor':'rgba(255,255,255,0.4)','zIndex':'999','height':'80vh','width':'100%'}}>
-            <div className="card row" onClick={()=>setToggler(false)}>
-                <img className="card-img-top" src={clip&&clip.toString()} alt="Card image cap"/>
+        <div className={`p-3 align-self-center position-fixed overflow-auto ${toggler?'visible':'invisible'}`} style={{'backgroundColor':'rgba(255,255,255,0.4)','zIndex':'999','width':'100%','height':'80vh'}}>
+            <div className="card row">
+                <img className="card-img-top" src={clip&&clip.toString()} alt="Project Image"/>
                 <div className="d-flex flex-column card-body">
                     <div className="mb-3">
                         <p className="card-title">
@@ -72,18 +72,26 @@ const DetailRaiserCard=({
                         </div>
                     </div>
                 </div>
-                <input
-                onChange={(e)=>setContribution(e.target.value)}
-                type='number'
-                step='0.01'
-                placeholder='Enter amount you want to contribute'
-                className='form-control align-self-center col-12 col-sm-8 col-lg-6 mb-2'
-                />
-                <button onClick={contribute} 
+                <div className="row">
+                    <input
+                    onChange={(e)=>setContribution(e.target.value)}
+                    type='number'
+                    step='0.01'
+                    placeholder='Enter amount in ETH'
+                    className='form-control ml-2 col-6 mb-2'
+                    />
+                    <button onClick={contribute} 
+                            type='button' 
+                            className={`btn themeColor col-3 p-0 ml-5`}>
+                                <b>DONATE</b>
+                    </button>
+                </div>   
+                <button onClick={()=>setToggler(false)}
                         type='button' 
-                        className={`btn themeColor align-self-center mb-3`}>
-                            CONTRIBUTE
+                        className={`btn btn-danger align-self-center m-3`}>
+                            CANCEL
                 </button>
+                
             </div>
         </div>
     )

@@ -35,7 +35,7 @@ const Register=({contract,account})=>{
     })
         .on('data',event=>{console.log(event.returnValues)})
     return(
-        <div>
+        <div className='d-flex flex-column justify-content-around' style={{'height':'100vh'}}>
             <input 
             onChange={setFileFromInput}
             type='file'
@@ -61,8 +61,10 @@ const Register=({contract,account})=>{
             placeholder='Enter Fund needed in ETH'
             className='form-control'
             />
-            <button onClick={submitForm} type='button' className='btn btn-primary'>UPLOAD</button>
-            <img src={file} height='48px' width='48px'/>
+            <div className='d-flex flex-row justify-content-between'>
+                <button onClick={submitForm} type='button' className='btn btn-primary'>UPLOAD</button>
+                <img src={file} alt='image uploaded' height='48px' width='48px'/>
+            </div>
         </div>
     )
 }

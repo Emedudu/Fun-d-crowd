@@ -2,3 +2,6 @@
 .themeColor{
     background-color: rgba(0,150,150,0.5);
 }
+.full-width{
+    width: 100%;
+}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContributionsCard from '../components/ContributionsCard';
 
 const Contributions=({contract,
@@ -9,6 +9,7 @@ const Contributions=({contract,
                     contributionsInitialRender,
                     setContributionsInitialRender
                 })=>{
+    const [filteredContributions,setFilteredContributions]=useState([])
     const getAllContributions=()=>{
         setLoading(true)
         contract&&contract.getPastEvents('Contributed',{
@@ -17,7 +18,6 @@ const Contributions=({contract,
             toBlock:'latest'
         }).then(async(events)=>{
             const contributions=await Promise.all(events.map(async obj=>{
-                console.log(obj)
                 obj=obj.returnValues
                 const {to,amount,uri}=obj
                 const response=await fetch(uri)
@@ -32,14 +32,23 @@ const Contributions=({contract,
                 })
             }))
             setAllContributions(contributions);
+            setFilteredContributions(contributions)
             setLoading(false)
          })
+    }
+    const filterContributions=(e)=>{
+        e.preventDefault();
+        const filtered=allContributions.filter((obj,i)=>{
+            return obj.heading.includes(e.target.value)
+        })
+        setFilteredContributions(filtered)
     }
     useEffect(()=>{
         if(contract&&contributionsInitialRender){
             getAllContributions()
             setContributionsInitialRender(false)
         }
+        setFilteredContributions(allContributions)
     },[contract])
     contract&&contract.events.Contributed({
         filter:{sender:account}
@@ -50,11 +59,14 @@ const Contributions=({contract,
     })
     return(
         <div>
-            Contributions
-            
-            {allContributions.length?(
+            <input
+            onInput={filterContributions}
+            placeholder='Search Contributions'
+            className='form-control align-self-center col-12 col-sm-8 col-lg-6 mb-2'
+            />
+            {filteredContributions.length?(
                 <div className='d-flex row justify-content-center'>
-                    {allContributions.map((obj,i)=>{
+                    {filteredContributions.map((obj,i)=>{
                             return <ContributionsCard
                             key={i} 
                             heading={obj.heading}
@@ -67,7 +79,7 @@ const Contributions=({contract,
                 </div>
             ):(
                 <div className='d-flex align-items-center justify-content-center' style={{'height':'100vh'}}>
-                    <h4>You have never contributed in your life</h4>
+                    <h4>No contributions</h4>
                 </div>
             )
             }

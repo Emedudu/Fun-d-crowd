@@ -10,6 +10,7 @@ const Home=({contract,
             fundRaisers,
             setFundRaisers})=>{
     const [toggler, setToggler]=useState(false)
+    const [filteredRaisers,setFilteredRaisers]=useState([])
     const [fundRaiserDetails,setFundRaiserDetails]=useState({})
     const getAllFundRaisers=async()=>{
         setLoading(true)
@@ -20,11 +21,9 @@ const Home=({contract,
             let fundRaiserFetched=await contract.methods.fundRaisers(i).call()
             let exists=await contract.methods.exists(fundRaiserFetched.adress).call()
             if (exists){
-                console.log(fundRaiserFetched.uri)
                 let response=await fetch(fundRaiserFetched.uri)
-                console.log(response)
                 let metadata=await response.json()
-                
+    
                 let adress=fundRaiserFetched.adress
                 let votes=fundRaiserFetched.votes
                 let heading=metadata.heading
@@ -48,7 +47,15 @@ const Home=({contract,
             }
         }
         setFundRaisers(fundRaisersFetched)
+        setFilteredRaisers(fundRaisersFetched)
         setLoading(false)
+    }
+    const filterFundRaisers=(e)=>{
+        e.preventDefault();
+        const filtered=fundRaisers.filter((obj,i)=>{
+            return obj.heading.includes(e.target.value)
+        })
+        setFilteredRaisers(filtered)
     }
     useEffect(()=>{
         if(contract!==''){
@@ -57,6 +64,7 @@ const Home=({contract,
                 setHomeInitialRender(false);
             } 
         }
+        setFilteredRaisers(fundRaisers)
     },[contract])
     contract&&contract.events.FundRaiserAdded({
         filter:{sender:account}
@@ -74,16 +82,21 @@ const Home=({contract,
     })
     return(
         <div>
-            <div>
+            <input
+            onInput={filterFundRaisers}
+            placeholder='Search'
+            className='form-control align-self-center col-12 col-sm-8 col-lg-6 mb-2'
+            />
+            <div >
                 <DetailRaiserCard 
                 contract={contract}
                 account={account}
                 toggler={toggler}
                 setToggler={setToggler}
                 fundRaiserDetails={fundRaiserDetails}/>
-                {fundRaisers.length?(
+                {filteredRaisers.length?(
                     <div className='row d-flex justify-content-center'>
-                        {fundRaisers.map((obj,i)=>{
+                        {filteredRaisers.map((obj,i)=>{
                                 return <RaiserCard
                                 key={i} 
                                 setToggler={setToggler}
