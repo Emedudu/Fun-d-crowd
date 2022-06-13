@@ -1,5 +1,6 @@
 import React from "react";
 import Web3 from "web3";
+import Matic from "../images/matic.png";
 
 const ContributionsCard=({heading,
                         purpose,
@@ -23,7 +24,7 @@ const ContributionsCard=({heading,
                         <b>To:</b>{to}
                     </p>
                     <p className="card-text">
-                        <b>Amount: </b>{web3.utils.fromWei(amount)}<b>ETH</b>
+                        <b>Amount: </b>{web3.utils.fromWei(amount)}<img src={Matic} height='36px' width='36px' alt="MATIC"/>
                     </p>
                 </div>
             </div>

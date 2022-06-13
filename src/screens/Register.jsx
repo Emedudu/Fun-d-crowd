@@ -60,7 +60,7 @@ const Register=({contract,account,setLoading})=>{
             onChange={(e)=>setFund(e.target.value)}
             type='number'
             step='0.01'
-            placeholder='Enter Fund needed in ETH'
+            placeholder='Enter Fund needed in MATIC'
             className='form-control'
             />
             <div className='d-flex flex-row justify-content-between'>

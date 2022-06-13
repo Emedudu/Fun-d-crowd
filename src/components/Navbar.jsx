@@ -9,7 +9,7 @@ const Navigation=({walletConnect,account})=>{
         <Navbar expanded={expanded} collapseOnSelect expand="lg" variant="light" sticky='top' style={{'backgroundImage': 'linear-gradient(to right,rgba(255,255,255,0.7),rgba(0,200,200,0.4))'}}>
           <Container>
             <Navbar.Brand href="#home"><img src={Logo} alt="FUN-D-CROWD" width="48" height="48"/></Navbar.Brand>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={() => setExpanded(expanded ? false : "expanded")} />
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={() => setExpanded(expanded ? false : true)} />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
                 <Nav.Link as={Link} to='/' onClick={() => setExpanded(false)}>HOME</Nav.Link>

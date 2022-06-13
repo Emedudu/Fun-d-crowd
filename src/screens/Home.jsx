@@ -53,7 +53,7 @@ const Home=({contract,
     const filterFundRaisers=(e)=>{
         e.preventDefault();
         const filtered=fundRaisers.filter((obj,i)=>{
-            return obj.heading.includes(e.target.value)
+            return obj.heading.toLowerCase().includes(e.target.value.toLowerCase())
         })
         setFilteredRaisers(filtered)
     }

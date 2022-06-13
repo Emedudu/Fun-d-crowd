@@ -1,5 +1,6 @@
 import React from "react";
 import Web3 from "web3";
+import Matic from "../images/matic.png";
 
 const RaiserCard=({
     setToggler,
@@ -40,7 +41,7 @@ const RaiserCard=({
                         <b>Purpose: </b>{purpose}
                     </p>
                     <p className="card-text">
-                        <b>Fund Left: {web3.utils.fromWei(fundLeft.toString())} ETH</b>
+                        <b>Fund Left: {web3.utils.fromWei(fundLeft.toString())}</b><img src={Matic} height='36px' width='36px' alt="MATIC"/>
                     </p>
                 </div>
             </div>

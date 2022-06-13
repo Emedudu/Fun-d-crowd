@@ -39,7 +39,7 @@ const Contributions=({contract,
     const filterContributions=(e)=>{
         e.preventDefault();
         const filtered=allContributions.filter((obj,i)=>{
-            return obj.heading.includes(e.target.value)
+            return obj.heading.toLowerCase().includes(e.target.value.toLowerCase())
         })
         setFilteredContributions(filtered)
     }
